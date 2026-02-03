@@ -75,7 +75,7 @@ public class GradeManager {
             	}
         	}        
         }
-        return total;  // Return the calculated class average
+        return total/count;  // Return the calculated class average
     }
 
     /**

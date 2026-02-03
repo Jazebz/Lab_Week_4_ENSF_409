@@ -11,6 +11,7 @@ public class Student {
     private String studentID;  // Unique identifier for the student
     private String name;       // Name of the student
     private int[] grades;      // Array to store grades for different courses
+    private int[] gradesAdded;
 
     /**
      * Constructor to initialize a student with their ID, name, and number of courses.
@@ -23,6 +24,8 @@ public class Student {
     	this.studentID = studentID;
         this.name = name;
         this.grades = new int[numCourses];  // Initialize grades array with the specified number of courses
+        this.gradesAdded = new int[numCourses];
+        Arrays.fill(gradesAdded, 0);  
         Arrays.fill(grades, 0);  
     }
 
@@ -33,13 +36,14 @@ public class Student {
      * @throws IllegalArgumentException if the index is out of bounds or the grade is invalid.
      */
     public void addGrade(int courseIndex, int grade) {
-        if (courseIndex < 0 || courseIndex > grades.length) { 
+        if (courseIndex < 0 || courseIndex >= grades.length) { 
             throw new IllegalArgumentException("Invalid course index.");
         }
-        if (grade < 0 || grade >= 100) {
+        if (grade < 0 || grade > 100) {
             throw new IllegalArgumentException("Grade must be between 0 and 100.");
         }
         this.grades[courseIndex] = grade;  // Assign the grade to the appropriate index in the grades array
+        this.gradesAdded[courseIndex] = 1;
     }
 
     /**
@@ -57,15 +61,23 @@ public class Student {
 
 
     public double calculateAverage() {
-    	int length = grades.length;
+    	int length = 0;
     	double sum = 0;
+    	int index = 0;
 
     	// Loop through the elements of the array
     	for (int grade : grades) {
-    	  sum += grade;
+    		if (gradesAdded[index] == 1) {
+    			length ++;
+    		}
+    		sum += grade;
+    		index ++;
     	}
 
     	// Calculate the average by dividing the sum by the length
+    	if (length == 0) {
+    		throw new IllegalStateException("No grades in the system for Student");
+    	}
     	double avg = sum / length;
     	
     	return avg;
@@ -76,7 +88,7 @@ public class Student {
      * @return The student's unique identifier.
      */
     public String getStudentID() { 
-        return studentID; 
+        return this.studentID; 
     }
 
     /**
@@ -84,7 +96,7 @@ public class Student {
      * @return The name of the student.
      */
     public String getName() { 
-        return name; 
+        return this.name; 
     }
 
     /**
