@@ -10,8 +10,8 @@ public class GradeManager {
 
     // Constructor to initialize the student list.
     public GradeManager(int maxStudents) {
-        students = null;
-        currentSize = 0;
+        this.students = new Student[maxStudents];
+        this.currentSize = 0;
     }
     
 
@@ -22,18 +22,19 @@ public class GradeManager {
      * @throws IllegalStateException if the student list is full.
      */
     public void addStudent(Student student) {
-        if (currentSize >= students.length) {
+        if (this.currentSize >= this.students.length) {
             throw new IllegalStateException("Cannot add more students. The list is full.");
         }
     
-        for (int i = 0; i < currentSize; i++) {
-            if (students[i].getStudentID().equals(student.getStudentID())) {
+        for (int i = 0; i < this.currentSize; i++) {
+            if (this.students[i].getStudentID().equals(student.getStudentID())) {
                 throw new IllegalArgumentException("Student with this ID already exists.");
             }
         }
+        
     
-        students[currentSize] = student; // Add student at the next available position
-        currentSize++; // Increase the count of students
+        this.students[currentSize] = student; // Add student at the next available position
+        this.currentSize++; // Increase the count of students
     }
 
     /**
@@ -42,9 +43,9 @@ public class GradeManager {
      * @return The Student object if found, otherwise null.
      */
     public Student getStudentByID(String studentID) {
-        for (int i = 0; i < currentSize; i++) {
-            if (students[i].getStudentID().equals(studentID)) {
-                return students[i];
+        for (int i = 0; i < this.currentSize; i++) {
+            if (this.students[i].getStudentID().equals(studentID)) {
+                return this.students[i];
             }
         }
         return null;
@@ -59,17 +60,21 @@ public class GradeManager {
     public double calculateClassAverage() {
         double total = 0;  // Accumulator for total grades
         int count = 0;     // Counter for number of students with valid grades
+        
+        if (currentSize == 0) {
+        	throw new IllegalStateException("There are no students in the sytsem");
+        }
+        else {
 
-        for (int i = 0; i < currentSize; i++) {
-            try {
-                total += students[i].calculateAverage();
-                count++;
-            } catch (IllegalStateException e) {
-                System.out.println("Skipping student " + students[i].getStudentID() + ": " + e.getMessage());
-            }
-        }        
-
-
+        	for (int i = 0; i < currentSize; i++) {
+            	try {
+                	total += students[i].calculateAverage();
+                	count++;
+            	} catch (IllegalStateException e) {
+                	System.out.println("Skipping student " + students[i].getStudentID() + ": " + e.getMessage());
+            	}
+        	}        
+        }
         return total;  // Return the calculated class average
     }
 
@@ -78,7 +83,7 @@ public class GradeManager {
      * @return The number of students in the list.
      */
     public int getTotalStudents() {
-        return currentSize - 1;
+        return currentSize;
     }
 
 }

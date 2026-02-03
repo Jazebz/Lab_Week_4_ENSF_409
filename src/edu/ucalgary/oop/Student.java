@@ -20,7 +20,8 @@ public class Student {
      * @param numCourses The number of courses the student is enrolled in.
      */
     public Student(String studentID, String name, int numCourses) {
-        this.studentID = name;
+    	this.studentID = studentID;
+        this.name = name;
         this.grades = new int[numCourses];  // Initialize grades array with the specified number of courses
         Arrays.fill(grades, 0);  
     }
@@ -38,7 +39,7 @@ public class Student {
         if (grade < 0 || grade >= 100) {
             throw new IllegalArgumentException("Grade must be between 0 and 100.");
         }
-        grades[courseIndex] = grade;  // Assign the grade to the appropriate index in the grades array
+        this.grades[courseIndex] = grade;  // Assign the grade to the appropriate index in the grades array
     }
 
     /**
@@ -51,12 +52,23 @@ public class Student {
         if (courseIndex < 0 || courseIndex > grades.length) {
             throw new IllegalArgumentException("Invalid course index.");
         }
-        return grades[courseIndex];  // Return the grade for the requested course index
+        return this.grades[courseIndex];  // Return the grade for the requested course index
     }
 
 
     public double calculateAverage() {
-        return 0.0;  
+    	int length = grades.length;
+    	double sum = 0;
+
+    	// Loop through the elements of the array
+    	for (int grade : grades) {
+    	  sum += grade;
+    	}
+
+    	// Calculate the average by dividing the sum by the length
+    	double avg = sum / length;
+    	
+    	return avg;
     }
 
     /**
@@ -64,7 +76,7 @@ public class Student {
      * @return The student's unique identifier.
      */
     public String getStudentID() { 
-        return name; 
+        return studentID; 
     }
 
     /**
